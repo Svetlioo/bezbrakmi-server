@@ -1,12 +1,14 @@
 package com.bezbrakmi.app.service;
 
 import com.bezbrakmi.app.entity.CarListing;
+import com.bezbrakmi.app.entity.Option;
 import com.bezbrakmi.app.repository.CarListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
+
 
 @Service
 public class CarListingService implements ICarListingService {
@@ -24,8 +26,6 @@ public class CarListingService implements ICarListingService {
 
     @Override
     public void createNewCarListing() {
-        CarListing carListing = new CarListing();
 
-        carListingRepository.save(carListing);
     }
 }

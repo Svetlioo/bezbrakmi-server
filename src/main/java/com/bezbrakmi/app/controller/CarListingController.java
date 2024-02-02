@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api/listing")
 public class CarListingController {
     ICarListingService carListingService;
 
@@ -20,23 +20,21 @@ public class CarListingController {
         this.carListingService = carListingService;
     }
 
-    @GetMapping("/listing/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CarListing> getCarListingById(@PathVariable UUID id) {
         Optional<CarListing> carListing = carListingService.getCarListingById(id);
-        if (carListing.isPresent()) {
-            return new ResponseEntity<>(carListing.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return carListing.map(listing ->
+                new ResponseEntity<>(listing, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/listing/add")
+    @PostMapping()
     public ResponseEntity<?> addNewCarListing() {
         try {
             carListingService.createNewCarListing();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.valueOf(e.getMessage()));
         }
     }
 }
