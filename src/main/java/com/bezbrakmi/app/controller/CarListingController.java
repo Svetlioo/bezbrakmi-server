@@ -1,22 +1,25 @@
 package com.bezbrakmi.app.controller;
 
+import com.bezbrakmi.app.dto.CarListingDTO;
 import com.bezbrakmi.app.entity.CarListing;
-import com.bezbrakmi.app.service.ICarListingService;
+import com.bezbrakmi.app.service.CarListingService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/listing")
 public class CarListingController {
-    ICarListingService carListingService;
+    private final CarListingService carListingService;
 
     @Autowired
-    public CarListingController(ICarListingService carListingService) {
+    public CarListingController(CarListingService carListingService) {
         this.carListingService = carListingService;
     }
 
@@ -28,10 +31,21 @@ public class CarListingController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getAllCarListings() {
+        List<CarListing> carListings = carListingService.getAllCarListings();
+        if (carListings.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(carListings, HttpStatus.OK);
+        }
+    }
+
+
     @PostMapping()
-    public ResponseEntity<?> addNewCarListing() {
+    public ResponseEntity<?> addNewCarListing(@Valid @RequestBody CarListingDTO carListingDTO) {
         try {
-            carListingService.createNewCarListing();
+            carListingService.createNewCarListing(carListingDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.valueOf(e.getMessage()));
