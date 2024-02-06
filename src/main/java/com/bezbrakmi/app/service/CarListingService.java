@@ -1,31 +1,17 @@
 package com.bezbrakmi.app.service;
 
+import com.bezbrakmi.app.dto.CarListingDTO;
 import com.bezbrakmi.app.entity.CarListing;
-import com.bezbrakmi.app.entity.Option;
-import com.bezbrakmi.app.repository.CarListingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import jakarta.validation.Valid;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+public interface CarListingService {
+    Optional<CarListing> getCarListingById(UUID id);
 
-@Service
-public class CarListingService implements ICarListingService {
-    CarListingRepository carListingRepository;
+    void createNewCarListing(@Valid CarListingDTO carListingDTO);
 
-    @Autowired
-    public CarListingService(CarListingRepository carListingRepository) {
-        this.carListingRepository = carListingRepository;
-    }
-
-    @Override
-    public Optional<CarListing> getCarListingById(UUID id) {
-        return carListingRepository.findById(id);
-    }
-
-    @Override
-    public void createNewCarListing() {
-
-    }
+    List<CarListing> getAllCarListings();
 }
