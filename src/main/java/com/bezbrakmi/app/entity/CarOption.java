@@ -1,29 +1,25 @@
 package com.bezbrakmi.app.entity;
 
+import com.bezbrakmi.app.model.BaseEntity;
 import com.bezbrakmi.app.model.OptionCategory;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "car_option")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarOption {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class CarOption extends BaseEntity {
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private OptionCategory category;
-
 
 }
